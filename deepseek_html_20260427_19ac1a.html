@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Влияние запахов на психофизическое состояние человека | Проект Рыбалкина Егора</title>
+  <!-- Google Fonts для эстетики: заголовки Playfair Display, текст Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fcf9f2; /* тёплый сливочный фон */
+      color: #2e2e2e;
+      line-height: 1.7;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    /* ---- НАВИГАЦИЯ ---- */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(252, 249, 242, 0.85);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 18px rgba(0,0,0,0.04);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.8rem;
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba(180, 140, 100, 0.2);
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #4a3b2f;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: color 0.3s, border-bottom 0.2s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 2px;
+    }
+
+    .nav a:hover {
+      color: #c67b4b;
+      border-bottom-color: #c67b4b;
+    }
+
+    /* ---- HERO ---- */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 90vh;
+      background: linear-gradient(135deg, #fef9f0 0%, #f7efe2 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -20%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(circle at 30% 40%, rgba(210, 150, 100, 0.08) 0%, transparent 60%),
+                  radial-gradient(circle at 70% 70%, rgba(160, 120, 180, 0.06) 0%, transparent 55%);
+      animation: heroFloat 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes heroFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-2%, 2%) scale(1.03); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 850px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 4.5rem);
+      color: #3e2e20;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+      text-shadow: 0 2px 10px rgba(255,255,240,0.8);
+    }
+
+    .hero .subtitle {
+      font-size: 1.3rem;
+      color: #6b5a4a;
+      font-style: italic;
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+    }
+
+    .author {
+      font-weight: 600;
+      color: #8b6b4d;
+      letter-spacing: 0.4px;
+      margin-top: 0.4rem;
+    }
+
+    .btn-scroll {
+      background: transparent;
+      border: 2px solid #b28b6b;
+      color: #5e4636;
+      padding: 0.8rem 2.2rem;
+      font-weight: 600;
+      border-radius: 40px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.35s;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      background: rgba(255,250,245,0.5);
+      backdrop-filter: blur(6px);
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-scroll:hover {
+      background: #b28b6b;
+      color: #fff;
+      border-color: #b28b6b;
+    }
+
+    /* ---- ОБЩИЕ СЕКЦИИ ---- */
+    section {
+      padding: 5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .section-title {
+      font-size: 2.6rem;
+      color: #3e2e20;
+      margin-bottom: 2.2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 70px;
+      height: 3px;
+      background: #d9a87c;
+      margin: 1rem auto 0;
+      border-radius: 4px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition: opacity 0.8s cubic-bezier(0.15, 0.85, 0.3, 1.05), transform 0.8s cubic-bezier(0.15, 0.85, 0.3, 1.05);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- КАРТОЧКИ ЦЕЛЕЙ ---- */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 2.2rem;
+    }
+
+    .card {
+      background: #fffbf5;
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      border: 1px solid #ede3d6;
+      transition: transform 0.25s, box-shadow 0.3s;
+      text-align: center;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 30px rgba(160, 120, 80, 0.12);
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+      color: #5e4636;
+    }
+
+    /* ---- ОПРОС БЛОК ---- */
+    .poll-highlight {
+      background: linear-gradient(105deg, #faf3e9 0%, #f5e9da 100%);
+      border-radius: 40px;
+      padding: 2.8rem;
+      margin: 2.5rem 0;
+      border-left: 10px solid #c67b4b;
+      font-style: italic;
+      font-size: 1.3rem;
+      color: #3d2e1e;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.05);
+    }
+
+    /* ---- ЭКСПЕРИМЕНТ АРОМА-ТЕСТ ---- */
+    .aroma-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0 2rem;
+    }
+
+    .aroma-item {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 2rem 1.5rem;
+      flex: 1 1 160px;
+      min-width: 150px;
+      max-width: 200px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+      text-align: center;
+      cursor: pointer;
+      transition: 0.25s;
+      border: 1px solid #ecdccb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .aroma-item:hover {
+      background: #fff7ec;
+      border-color: #d9a87c;
+      transform: scale(1.03);
+    }
+
+    .aroma-emoji {
+      font-size: 3.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .aroma-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #4f3b28;
+    }
+
+    .reaction-detail {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #5a4a39;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      border-top: 1px dashed #ddcebc;
+      padding-top: 0.8rem;
+    }
+
+    .participant {
+      background: #f7efe3;
+      border-radius: 20px;
+      padding: 0.3rem 0.7rem;
+      font-weight: 600;
+    }
+
+    /* ---- ИТОГИ ТЕСТА ---- */
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .result-card {
+      background: #fffbf5;
+      border-radius: 24px;
+      padding: 2rem;
+      border-top: 8px solid #d9a87c;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    }
+
+    /* ---- ПРАКТИЧЕСКИЕ РЕКОМЕНДАЦИИ ---- */
+    .advice-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .advice-item {
+      background: #fffbf5;
+      border-radius: 30px;
+      padding: 2rem;
+      flex: 1 1 250px;
+      max-width: 280px;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      border: 1px solid #eddccb;
+    }
+
+    .advice-emoji {
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ---- ФУТЕР ---- */
+    footer {
+      background: #e9dccf;
+      text-align: center;
+      padding: 3rem 2rem;
+      margin-top: 3rem;
+      border-radius: 50px 50px 0 0;
+      color: #4d3b2c;
+      font-size: 0.95rem;
+    }
+
+    /* Адаптив */
+    @media (max-width: 600px) {
+      .nav {
+        gap: 1rem;
+        font-size: 0.8rem;
+      }
+      section {
+        padding: 3rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Навигация -->
+  <nav class="nav">
+    <a href="#relevance">Актуальность</a>
+    <a href="#goal">Цель</a>
+    <a href="#poll">Опрос</a>
+    <a href="#experiment">Эксперимент</a>
+    <a href="#results">Итоги</a>
+    <a href="#advice">Советы</a>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Влияние запахов<br>на психофизическое состояние человека</h1>
+      <p class="subtitle">Как ароматы меняют настроение, память и работоспособность</p>
+      <p class="author">Автор: Рыбалкин Егор, 10 «Э» &nbsp;|&nbsp; Руководитель: Майорова А.Е.</p>
+      <a href="#relevance" class="btn-scroll" style="margin-top:2rem;">Узнать больше ↓</a>
+    </div>
+  </header>
+
+  <!-- Актуальность -->
+  <section id="relevance" class="reveal">
+    <h2 class="section-title">Почему это важно?</h2>
+    <div style="max-width: 800px; margin: 0 auto; font-size: 1.15rem; color: #3f3427;">
+      <p style="margin-bottom: 1.5rem;">Человек постоянно находится в мире запахов. Ежедневно мы сталкиваемся с десятками ароматов: от утреннего кофе до запаха свежескошенной травы, от парфюма в транспорте до аромата домашней выпечки. Запахи способны влиять на настроение, работоспособность, эмоциональное состояние и даже физическое самочувствие.</p>
+      <p style="font-weight: 600; background: #f7efe3; padding: 1.2rem 2rem; border-radius: 50px; display: inline-block;">Несмотря на научные доказательства, большинство людей – особенно школьники – не используют этот ресурс осознанно.</p>
+    </div>
+  </section>
+
+  <!-- Цель, задачи, продукт -->
+  <section id="goal" class="reveal">
+    <h2 class="section-title">Цель и задачи проекта</h2>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <h3>Цель</h3>
+        <p>Определить положительное и отрицательное влияние запахов на психофизическое состояние человека.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📋</div>
+        <h3>Тип проекта</h3>
+        <p>Исследовательский, с практическим продуктом.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧴</div>
+        <h3>Продукт</h3>
+        <p>Практические рекомендации и ароматические композиции для улучшения состояния.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">👥</div>
+        <h3>Целевая группа</h3>
+        <p>Ученики, учителя и родители школы №1253.</p>
+      </div>
+    </div>
+    <div style="margin-top: 2.8rem; background: #fffbf5; border-radius: 28px; padding: 2rem; box-shadow: 0 8px 24px rgba(0,0,0,0.04);">
+      <p><strong>Объект изучения:</strong> запахи как внешний стимул.</p>
+      <p><strong>Предмет:</strong> влияние запахов на психофизическое состояние человека.</p>
+      <p style="font-style: italic; margin-top: 1rem;">«Запахи напрямую влияют на психоэмоциональное состояние и умственную работоспособность, однако этот ресурс остаётся недооценённым и редко используется учащимися осознанно.»</p>
+    </div>
+  </section>
+
+  <!-- Опрос учащихся -->
+  <section id="poll" class="reveal">
+    <h2 class="section-title">Опрос учащихся</h2>
+    <p style="text-align: center; max-width: 700px; margin: 0 auto 2rem;">Мы выяснили, осознают ли школьники влияние запахов на своё психоэмоциональное состояние и используют ли ароматы целенаправленно для улучшения самочувствия и работоспособности.</p>
+    <div class="poll-highlight">
+      📊 <strong>Результаты опроса:</strong> гипотеза полностью подтверждена. Запахи действительно влияют на психоэмоциональное состояние и работоспособность учащихся, однако этот ресурс остаётся недооценённым и используется осознанно лишь небольшим числом школьников.
+    </div>
+  </section>
+
+  <!-- Эксперимент: Семейный арома-тест -->
+  <section id="experiment" class="reveal">
+    <h2 class="section-title">🍃 Семейный арома-тест</h2>
+    <p style="text-align: center; max-width: 750px; margin: 0 auto 2.5rem;">Цель: определить, как различные натуральные ароматы влияют на эмоциональное состояние и ассоциативную память членов семьи, и сравнить реакции с научными данными.</p>
+    
+    <div style="background: #f8f0e7; border-radius: 30px; padding: 2rem; margin-bottom: 2rem;">
+      <p><strong>👩‍👩‍👦 Участники:</strong> Мама, Бабушка, Исследователь — Рыбалкин Егор.</p>
+      <p><strong>🧪 Образцы:</strong> цедра апельсина, эфирное масло лаванды, розмарина, ванильный сахар, старая книга.</p>
+      <p><strong>💧 Контроль:</strong> чистая вода для «очистки» рецепторов.</p>
+    </div>
+
+    <div class="aroma-cards">
+      <div class="aroma-item" id="aroma-citrus">
+        <div class="aroma-emoji">🍊</div>
+        <div class="aroma-name">Цитрус (апельсин)</div>
+        <div class="reaction-detail">
+          <span class="participant">👩 Мама: бодрость, свежесть</span>
+          <span class="participant">👵 Бабушка: прилив энергии</span>
+        </div>
+      </div>
+      <div class="aroma-item">
+        <div class="aroma-emoji">💜</div>
+        <div class="aroma-name">Лаванда</div>
+        <div class="reaction-detail">
+          <span class="participant">👩 Мама: спокойствие, расслабление</span>
+          <span class="participant">👵 Бабушка: умиротворение</span>
+        </div>
+      </div>
+      <div class="aroma-item">
+        <div class="aroma-emoji">🌿</div>
+        <div class="aroma-name">Розмарин</div>
+        <div class="reaction-detail">
+          <span class="participant">👩 Мама: концентрация, ясность</span>
+          <span class="participant">👵 Бабушка: лёгкое раздражение</span>
+        </div>
+      </div>
+      <div class="aroma-item">
+        <div class="aroma-emoji">🍦</div>
+        <div class="aroma-name">Ваниль</div>
+        <div class="reaction-detail">
+          <span class="participant">👩 Мама: тёплые детские воспоминания</span>
+          <span class="participant">👵 Бабушка: уют, выпечка из детства</span>
+        </div>
+      </div>
+      <div class="aroma-item">
+        <div class="aroma-emoji">📖</div>
+        <div class="aroma-name">Старая книга</div>
+        <div class="reaction-detail">
+          <span class="participant">👩 Мама: библиотека юности</span>
+          <span class="participant">👵 Бабушка: воспоминания о дедушке</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Итоги эксперимента -->
+  <section id="results" class="reveal">
+    <h2 class="section-title">Итоги «Семейного арома-теста»</h2>
+    <div class="result-grid">
+      <div class="result-card">
+        <h3>🔬 Подтвердил теорию</h3>
+        <p>Реакции на лаванду (успокоение) и апельсин (бодрость) полностью совпали с научными данными.</p>
+      </div>
+      <div class="result-card">
+        <h3>🧠 Роль личного опыта</h3>
+        <p>Один и тот же запах (розмарин) вызвал противоположные эмоции из-за разных ассоциаций.</p>
+      </div>
+      <div class="result-card">
+        <h3>📚 Феномен Пруста</h3>
+        <p>Запахи ванили и старой книги мгновенно пробудили яркие эмоциональные воспоминания из детства.</p>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 3rem; font-weight: 600; font-size: 1.2rem; background: #fffbf5; padding: 1.5rem; border-radius: 30px;">
+      ✅ Эксперимент показал: ароматы — мощный инструмент управления состоянием, но требующий индивидуального подхода.
+    </div>
+  </section>
+
+  <!-- Практические рекомендации (продукт проекта) -->
+  <section id="advice" class="reveal">
+    <h2 class="section-title">🌱 Практические рекомендации</h2>
+    <p style="text-align: center; margin-bottom: 2.5rem;">На основе исследования мы создали ароматические подсказки для улучшения самочувствия.</p>
+    <div class="advice-list">
+      <div class="advice-item">
+        <div class="advice-emoji">🍋</div>
+        <h3>Для бодрости</h3>
+        <p>Цитрусовые (апельсин, лимон) повышают энергию и настроение. Идеально утром или перед контрольной.</p>
+      </div>
+      <div class="advice-item">
+        <div class="advice-emoji">💜</div>
+        <h3>Для спокойствия</h3>
+        <p>Лаванда снижает тревожность, помогает расслабиться после учебного дня.</p>
+      </div>
+      <div class="advice-item">
+        <div class="advice-emoji">🌿</div>
+        <h3>Для концентрации</h3>
+        <p>Розмарин или мята улучшают внимание, но проверьте личную реакцию (может раздражать).</p>
+      </div>
+      <div class="advice-item">
+        <div class="advice-emoji">🍦</div>
+        <h3>Для уюта</h3>
+        <p>Ваниль, корица создают ощущение безопасности и тепла, снимают стресс.</p>
+      </div>
+    </div>
+    <p style="text-align: center; margin-top: 2.5rem; color: #6b5a4a; font-style: italic;">Используйте ароматы осознанно, учитывая индивидуальные ассоциации — и вы откроете новый уровень психологического комфорта.</p>
+  </section>
+
+  <!-- Перспективы и заключение -->
+  <section style="padding-top: 1rem;" class="reveal">
+    <div style="background: #e7dbcc; border-radius: 35px; padding: 2.5rem; text-align: center;">
+      <h2 style="font-size: 2rem; margin-bottom: 1rem;">Перспективы проекта</h2>
+      <p style="max-width: 650px; margin: 0 auto;">Создание набора «Арома-помощник» для школы: компактные ингаляторы с натуральными композициями для улучшения работоспособности и настроения учеников и учителей.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Проект Рыбалкина Егора, 10 «Э» класс, школа №1253</p>
+    <p style="margin-top: 0.5rem;">Руководитель: Майорова А.Е. | Научно-исследовательская работа</p>
+  </footer>
+
+  <!-- Скрипт для анимации появления при скролле -->
+  <script>
+    (function() {
+      const revealElements = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.25, rootMargin: "0px 0px -50px 0px" });
+
+      revealElements.forEach(el => observer.observe(el));
+
+      // Доп. интерактив для арома-карточек: показать/скрыть реакции по клику (уже видны, но можно подсветить)
+      const aromaItems = document.querySelectorAll('.aroma-item');
+      aromaItems.forEach(item => {
+        item.addEventListener('click', function() {
+          this.classList.toggle('expanded');
+          if (this.classList.contains('expanded')) {
+            this.style.background = '#f5e5d5';
+          } else {
+            this.style.background = '#ffffff';
+          }
+        });
+      });
+
+      // Плавный скролл для всех якорных ссылок (дополнительно к behavior smooth)
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if (targetId === "#") return;
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
